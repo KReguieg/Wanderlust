@@ -16,19 +16,42 @@ import java.util.List;
  * This class prints .kml files with the coordinates of a tour in it, a photo and it's coordinates.
  */
 public class KmlWriter {
+
+    /**
+     * PrintWriter used for writing kml-file to sdcard.
+     */
     private PrintWriter printWriter;
+
+    /**
+     * List with all logged Location-Objects.
+     */
     private List<Location> locationList;
+
+    /**
+     * Path to current photograph.
+     */
     private String mCurrentPhotopath;
 
+    /**
+     * Creates a new instance of KmlWriter.
+     * @param outputStream OutputStream to save the kml-file.
+     */
     public KmlWriter(OutputStream outputStream) {
         this.printWriter = new PrintWriter(outputStream);
         locationList = new ArrayList<>();
     }
 
+    /**
+     * Push a new Location to the Location-List.
+     * @param location Current location.
+     */
     public void pushLocation(Location location) {
         this.locationList.add(location);
     }
 
+    /**
+     * Write all pushed Locations from Location-List to kml-file.
+     */
     public void writeKml() {
         writeHeader();
         writePlacemark();
@@ -74,6 +97,10 @@ public class KmlWriter {
         this.printWriter.println("</kml>");
     }
 
+    /**
+     * Set current photograph.
+     * @param path Path to image.
+     */
     public void pushImagePath(String path) {
         mCurrentPhotopath = path;
     }
