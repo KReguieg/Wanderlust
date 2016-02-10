@@ -6,7 +6,7 @@ package de.flowment.wanderlust;
  * This data holding class represents a walking trip.
  * It holds all the valuable data as variables and is able to set and get them.
  */
-public class Trip {
+public class Tour {
 
     /**
      * The unique tripID to identify the trip object.
@@ -36,7 +36,7 @@ public class Trip {
      * @param timeInSeconds    The time in seconds a trip took.
      * @param kiloMetersWalked The distance in kilometers walked on a trip.
      */
-    public Trip(int tripID, String title, int timeInSeconds, double kiloMetersWalked) {
+    public Tour(int tripID, String title, int timeInSeconds, double kiloMetersWalked) {
         this.tripID = tripID;
         this.title = title;
         this.timeInSeconds = timeInSeconds;

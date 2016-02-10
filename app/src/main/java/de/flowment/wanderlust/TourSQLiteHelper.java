@@ -6,12 +6,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 /**
  * Created by Khaled Reguieg (s57532) <a href="mailto:Khaled.Reguieg@gmail.com">Khaled Reguieg, Khaled.Reguieg@gmail.com</a> on 07.01.2016.
- * This class builds the frame for the database tables and drops if it already exists.
+ * This class builds the frame for the database tables and drops it if it already exists.
  */
-public class TripSQLiteHelper extends SQLiteOpenHelper {
-    String createTripSQL = "CREATE TABLE trip (tripID INTEGER PRIMARY KEY, title TEXT, time INTEGER, kiloMetersWalked REAL, pathToKMLFile TEXT)";
+public class TourSQLiteHelper extends SQLiteOpenHelper {
+    String createTripSQL = "CREATE TABLE tour (tourID INTEGER PRIMARY KEY, title TEXT, time INTEGER, kiloMetersWalked REAL, pathToKMLFile TEXT)";
 
-    public TripSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public TourSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 

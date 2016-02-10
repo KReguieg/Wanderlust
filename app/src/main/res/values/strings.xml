@@ -7,4 +7,9 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_prepare_tour">Map</string>
     <string name="title_activity_tour">TourActivity</string>
+
+    <string name="titleDialog">Delete tour from List?</string>
+    <string name="messageDialog">Do you really want to delete the movie: \"%1$s\" from the list?</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
 </resources>

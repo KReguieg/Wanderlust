@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="imageId" type="id" />
+    <item name="tourTitleId" type="id" />
+    <item name="tourTimeInSecondsId" type="id" />
+    <item name="tourKilometerWalkedId" type="id" />
+    <item name="deleteButton" type="id" />
+</resources>

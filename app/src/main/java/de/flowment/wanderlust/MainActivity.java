@@ -1,89 +1,198 @@
 package de.flowment.wanderlust;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MenuItem;
+import android.text.Html;
+import android.text.format.DateUtils;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import java.util.ArrayList;
+import java.util.Random;
+
+/**
+ * This class is our MainActivity, it holds a list and fills it with all tours in our db.
+ */
+public class MainActivity extends AppCompatActivity {
 
     // Get name of the activity for log statements.
     // Should be done in every activity at first.
     private static final String TAG = MainActivity.class.getName();
+    /**
+     * Database object to perform with database.
+     */
+    SQLiteDatabase db;
+    /**
+     * Helper for SQLite Database.
+     */
+    private TourSQLiteHelper tourSQLiteHelper;
+    private ArrayList<Tour> tourList = new ArrayList<>();
+    private int mRndNumber;
+    private LinearLayout tourListLinearLayout;
+    // ImageView wanderlustHeaderImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        tourListLinearLayout = (LinearLayout) findViewById(R.id.tourListLinearLayout);
+        //wanderlustHeaderImage = (ImageView) findViewById(R.id.tourTitleImageView);
+        //Picasso.with(this).load(R.drawable.wanderlust_header).into(wanderlustHeaderImage);
+        fillListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Aufgabe 1 Trigger Logstatement.
-                Log.d(TAG, "Starte Wandertour!");
-                Snackbar.make(view, "Starte Wandertour! :)", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
                 Intent intent = new Intent();
                 intent.setClass(getBaseContext(), TourActivity.class);
                 startActivity(intent);
             }
         });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+    /**
+     * This method fills a vertical Scrollview with all entries of tours in the database.
+     * It creates a nice card layout for each entry.
+     */
+    private void fillListView() {
+        tourSQLiteHelper = new TourSQLiteHelper(MainActivity.this, "DBTour", null, 1);
+        db = tourSQLiteHelper.getWritableDatabase();
+        String[] fields = new String[]{"title", "time", "kiloMetersWalked", "pathToKMLFile"};
+
+        // Adding Image on top
+        ImageView headerImage = new ImageView(this);
+        LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        headerImage.setLayoutParams(imageParams);
+        headerImage.setAdjustViewBounds(true);
+        headerImage.setScaleType(ImageView.ScaleType.FIT_XY);
+        headerImage.setImageResource(R.drawable.wanderlust_header);
+        tourListLinearLayout.addView(headerImage);
+
+        Cursor c = db.query("tour", fields, null, null, null, null, null);
+        int id = 0;
+
+        if (c.moveToFirst()) {
+            do {
+                Tour t = new Tour(id, c.getString(0), c.getInt(2), c.getDouble(3));
+                tourList.add(t);
+                id++;
+            } while (c.moveToNext());
         }
-    }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+        Integer[] preferredColors = new Integer[]{0xFFFFA726, 0xFF26A69A};
+        Integer[] drawableIds = new Integer[]{
+                R.drawable.ic_directions_walk_white_24dp, R.drawable.ic_directions_walk_white_24dp,
+        };
 
-        if (id == R.id.nav_camara) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        // Creating the layout for the list programmatically for each movie object in the movieList
+        for (Tour t : tourList) {
+            int lastRnd = mRndNumber;
+            do {
+                mRndNumber = new Random().nextInt(preferredColors.length);
+            }
+            while (lastRnd == mRndNumber);
+            RelativeLayout rl = new RelativeLayout(this);
+            LinearLayout.LayoutParams relativeParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            relativeParams.setMargins(0, 0, 0, 25);
+            rl.setLayoutParams(relativeParams);
+            rl.requestLayout();
+            rl.setBackgroundColor(preferredColors[mRndNumber]);
+            rl.invalidate();
+            ImageView tourImage = new ImageView(this);
+            tourImage.setId(R.id.imageId);
+            tourImage.setAdjustViewBounds(true);
+            tourImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            RelativeLayout carrierRL = new RelativeLayout(this);
+            RelativeLayout.LayoutParams carrierLP = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            carrierLP.addRule(RelativeLayout.RIGHT_OF, tourImage.getId());
+            carrierLP.setMargins(5, 5, 5, 5);
+            carrierRL.setLayoutParams(carrierLP);
 
-        } else if (id == R.id.nav_slideshow) {
+            tourImage.setImageResource(drawableIds[mRndNumber]);
+            tourImage.setPadding(20, 20, 20, 20);
 
-        } else if (id == R.id.nav_manage) {
+            final TextView tourTitle = new TextView(this);
+            tourTitle.setId(R.id.tourTitleId);
+            tourTitle.setTextSize(28);
+            tourTitle.setText(t.getTitle());
 
-        } else if (id == R.id.nav_share) {
+            TextView tourTimeInSeconds = new TextView(this);
+            tourTimeInSeconds.setId(R.id.tourTimeInSecondsId);
+            tourTimeInSeconds.setTextSize(24);
+            tourTimeInSeconds.setText(String.valueOf(DateUtils.formatElapsedTime(t.getTimeInSeconds())));
 
-        } else if (id == R.id.nav_send) {
+            TextView tourKilometersWalked = new TextView(this);
+            tourKilometersWalked.setId(R.id.tourKilometerWalkedId);
+            tourKilometersWalked.setText(String.valueOf((int) t.getKiloMetersWalked()) + "km");
 
+
+            final ImageButton deleteButton = new ImageButton(this);
+            deleteButton.setId(R.id.deleteButton);
+            deleteButton.setImageResource(R.drawable.ic_delete_24dp);
+            deleteButton.setBackgroundColor(Color.TRANSPARENT);
+            RelativeLayout.LayoutParams btnLP = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            btnLP.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            btnLP.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            btnLP.addRule(RelativeLayout.ALIGN_PARENT_END);
+            deleteButton.setLayoutParams(btnLP);
+
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                    alert.setTitle(Html.fromHtml("<font color='#000000'>" + getString(R.string.titleDialog) + "</font>"));
+                    Resources res = getResources();
+                    String text = String.format(res.getString(R.string.messageDialog), tourTitle.getText().toString());
+
+                    alert.setMessage(text);
+                    alert.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            if (db != null) {
+                                db.delete("tour", "title = ?", new String[]{tourTitle.getText().toString()});
+                            }
+                            View parent = (View) deleteButton.getParent().getParent();
+                            parent.setVisibility(View.GONE);
+                        }
+                    });
+                    alert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                        }
+                    });
+                    alert.show();
+                }
+            });
+
+            TextView[] textViews = new TextView[]{tourTitle, tourTimeInSeconds, tourKilometersWalked};
+            Integer[] textViewIds = new Integer[]{tourTitle.getId(), tourTimeInSeconds.getId(), tourKilometersWalked.getId()};
+
+            rl.addView(tourImage);
+
+            carrierRL.addView(tourTitle);
+            for (int i = 0; i < textViews.length - 1; i++) {
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.addRule(RelativeLayout.BELOW, textViewIds[i]);
+                carrierRL.addView(textViews[i + 1], layoutParams);
+            }
+            carrierRL.addView(deleteButton);
+            rl.addView(carrierRL);
+            tourListLinearLayout.addView(rl);
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 }
