@@ -30,10 +30,9 @@
         android:src="@drawable/ic_play_arrow_24dp" />
 
     <fragment
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="com.google.android.gms.maps.MapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:id="@+id/mapfrag"
         android:layout_alignParentStart="true"
         tools:layout="@layout/abc_action_bar_up_container"

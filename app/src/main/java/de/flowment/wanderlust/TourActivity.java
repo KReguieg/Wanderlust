@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
@@ -154,10 +155,9 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        //SupportMapFragment fm = (SupportMapFragment)getSupportFragmentManager()
-        //        .findFragmentById(R.id.mapfrag);
+        SupportMapFragment fm = (SupportMapFragment)this.getSupportFragmentManager().findFragmentById(R.id.mapfrag);
 
-        //fm.getMapAsync(this);
+        fm.getMapAsync(this);
         //googleMap = fm.getMap();
 
         //googleMap.setMyLocationEnabled(true);
@@ -292,7 +292,7 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-
+        //Toast.makeText(getApplicationContext(),"Map ready", Toast.LENGTH_SHORT).show();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
