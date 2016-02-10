@@ -16,6 +16,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -25,6 +26,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -32,7 +38,7 @@ import java.util.ArrayList;
 
 import static android.widget.Toast.LENGTH_LONG;
 
-public class TourActivity extends AppCompatActivity {
+public class TourActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final String TAG = TourActivity.class.getName();
     /**
@@ -90,6 +96,9 @@ public class TourActivity extends AppCompatActivity {
      * A Android Material Design FAB.
      */
     private FloatingActionButton fab;
+    private boolean firstTime;
+    private GoogleMap googleMap;
+
     /**
      * A Tour object, holding the data of a tour.
      */
@@ -144,6 +153,15 @@ public class TourActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //SupportMapFragment fm = (SupportMapFragment)getSupportFragmentManager()
+        //        .findFragmentById(R.id.mapfrag);
+
+        //fm.getMapAsync(this);
+        //googleMap = fm.getMap();
+
+        //googleMap.setMyLocationEnabled(true);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -235,6 +253,10 @@ public class TourActivity extends AppCompatActivity {
                 timeTextView.setText(" " + chronometer.getText());
                 if (recordStarted && kmlWriter != null)
                     kmlWriter.pushLocation(mLocation);
+
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
             }
 
             @Override
@@ -267,4 +289,20 @@ public class TourActivity extends AppCompatActivity {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        this.googleMap.setMyLocationEnabled(true);
+    }
 }

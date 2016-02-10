@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_id": "wanderlust-df8c7",
+    "project_number": "732337447948",
+    "name": "Wanderlust"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:732337447948:android:d938d9d9909321bb",
+        "client_id": "android:de.flowment.wanderlust",
+        "client_type": 1,
+        "android_client_info": {
+          "package_name": "de.flowment.wanderlust"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "cloud_messaging_service": {
+          "status": 1,
+          "apns_config": []
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "google_signin_service": {
+          "status": 1
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "client_info": [],
+  "ARTIFACT_VERSION": "1"
+}

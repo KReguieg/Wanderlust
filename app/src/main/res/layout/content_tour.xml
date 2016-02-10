@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -28,12 +29,26 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:src="@drawable/ic_play_arrow_24dp" />
 
+    <fragment
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/mapfrag"
+        android:layout_alignParentStart="true"
+        tools:layout="@layout/abc_action_bar_up_container"
+        tools:context=".MapsActivity"
+        android:layout_alignEnd="@+id/linearLayout"
+        android:layout_alignParentTop="true"
+        android:layout_above="@+id/fab" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/fab"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/linearLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
