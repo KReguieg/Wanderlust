@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Parcel;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -30,12 +32,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static android.widget.Toast.LENGTH_LONG;
 
@@ -158,9 +165,6 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment fm = (SupportMapFragment)this.getSupportFragmentManager().findFragmentById(R.id.mapfrag);
 
         fm.getMapAsync(this);
-        //googleMap = fm.getMap();
-
-        //googleMap.setMyLocationEnabled(true);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -240,9 +244,17 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void getLocation() {
         LocationManager locationManager = (LocationManager) TourActivity.this.getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
+            Polyline line;
+            List<LatLng> points;
             @Override
             public void onLocationChanged(Location location) {
-                if (first) mLocation = location;
+                if (first) {
+                    mLocation = location;
+                    points = new ArrayList<>();
+                    line = googleMap.addPolyline(new PolylineOptions()
+                            .width(5)
+                            .color(Color.RED));
+                }
                 first = false;
                 mDistanceWalked += location.distanceTo(mLocation);
                 mLocation = location;
@@ -254,7 +266,14 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
                 if (recordStarted && kmlWriter != null)
                     kmlWriter.pushLocation(mLocation);
 
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude())));
+                LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+                points.add(ll);
+                line.setPoints(points);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(ll));
+                Circle c = googleMap.addCircle(new CircleOptions().center(ll));
+                c.setVisible(true);
+
+                //line.setPoints(line.getPoints().);
                 googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
             }
