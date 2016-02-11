@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
      * Database object to perform with database.
      */
     SQLiteDatabase db;
+    ImageView headerImage;
+    int counter;
     /**
      * Helper for SQLite Database.
      */
@@ -41,15 +45,12 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Tour> tourList = new ArrayList<>();
     private int mRndNumber;
     private LinearLayout tourListLinearLayout;
-    // ImageView wanderlustHeaderImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tourListLinearLayout = (LinearLayout) findViewById(R.id.tourListLinearLayout);
-        //wanderlustHeaderImage = (ImageView) findViewById(R.id.tourTitleImageView);
-        //Picasso.with(this).load(R.drawable.wanderlust_header).into(wanderlustHeaderImage);
         fillListView();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         String[] fields = new String[]{"title", "time", "kiloMetersWalked", "pathToKMLFile"};
 
         // Adding Image on top
-        ImageView headerImage = new ImageView(this);
+        headerImage = new ImageView(this);
         LinearLayout.LayoutParams imageParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -82,6 +83,22 @@ public class MainActivity extends AppCompatActivity {
         headerImage.setScaleType(ImageView.ScaleType.FIT_XY);
         headerImage.setImageResource(R.drawable.wanderlust_header);
         tourListLinearLayout.addView(headerImage);
+
+        headerImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.this.counter++;
+                if (counter >= 3) {
+                    Toast.makeText(getApplicationContext(), "Forest feeling in " + (5 - counter), Toast.LENGTH_SHORT).show();
+                }
+                if (counter == 5) {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/watch?v=mbGee6NRuNY&"));
+                    startActivity(browserIntent);
+                    counter = 0;
+                    // play sound
+                }
+            }
+        });
 
         Cursor c = db.query("tour", fields, null, null, null, null, null);
         int id = 0;

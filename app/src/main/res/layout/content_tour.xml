@@ -18,29 +18,31 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_gravity="bottom|end"
+        android:layout_margin="10dp"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
+        android:padding="10dp"
         android:src="@drawable/ic_play_arrow_24dp" />
 
     <fragment
+        android:id="@+id/mapfrag"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/mapfrag"
-        android:layout_alignParentStart="true"
-        tools:layout="@layout/abc_action_bar_up_container"
-        tools:context=".MapsActivity"
+        android:layout_above="@+id/fab"
         android:layout_alignEnd="@+id/linearLayout"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/fab" />
+        tools:context=".MapsActivity"
+        tools:layout="@layout/abc_action_bar_up_container" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/fab"
-        android:orientation="vertical"
-        android:id="@+id/linearLayout">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"

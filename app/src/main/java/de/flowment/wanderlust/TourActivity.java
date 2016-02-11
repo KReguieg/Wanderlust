@@ -13,7 +13,6 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Parcel;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -253,7 +252,7 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
                     points = new ArrayList<>();
                     line = googleMap.addPolyline(new PolylineOptions()
                             .width(5)
-                            .color(Color.RED));
+                            .color(Color.parseColor("#FF009688")));
                 }
                 first = false;
                 mDistanceWalked += location.distanceTo(mLocation);
@@ -272,10 +271,6 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(ll));
                 Circle c = googleMap.addCircle(new CircleOptions().center(ll));
                 c.setVisible(true);
-
-                //line.setPoints(line.getPoints().);
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
             }
 
             @Override
