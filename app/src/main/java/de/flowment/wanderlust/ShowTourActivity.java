@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -37,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class ShowTourActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -129,8 +131,10 @@ public class ShowTourActivity extends AppCompatActivity implements OnMapReadyCal
 
         String title = c.getString(0);
         //int time = t.getTimeInSeconds();
-        distanceTextView.setText(c.getInt(2) + " m");
-        timeTextView.setText(c.getString(1));
+        //distanceTextView.setText(c.getInt(2) + " m");
+        distanceTextView.setText(String.format("%.3f km", c.getInt(2) / 1000.0));
+        int allSeconds = Integer.valueOf(c.getString(1));
+        timeTextView.setText(DateUtils.formatElapsedTime(allSeconds));
         File file = new File(path);
         InputStream fileInputStream;
         try {
