@@ -269,8 +269,7 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
                 points.add(ll);
                 line.setPoints(points);
                 googleMap.moveCamera(CameraUpdateFactory.newLatLng(ll));
-                Circle c = googleMap.addCircle(new CircleOptions().center(ll));
-                c.setVisible(true);
+
             }
 
             @Override

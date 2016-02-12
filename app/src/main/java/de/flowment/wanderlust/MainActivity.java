@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Random;
+import static android.widget.Toast.LENGTH_LONG;
+
 
 /**
  * This class is our MainActivity, it holds a list and fills it with all tours in our db.
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (c.moveToFirst()) {
             do {
-                Tour t = new Tour(id, c.getString(0), c.getInt(2), c.getDouble(3));
+                Tour t = new Tour(id, c.getString(0), c.getInt(1), c.getDouble(2));
                 tourList.add(t);
                 id++;
             } while (c.moveToNext());
@@ -141,6 +143,17 @@ public class MainActivity extends AppCompatActivity {
             carrierLP.addRule(RelativeLayout.RIGHT_OF, tourImage.getId());
             carrierLP.setMargins(5, 5, 5, 5);
             carrierRL.setLayoutParams(carrierLP);
+            final int tripID = t.getTripID();
+
+            carrierRL.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent();
+                    intent.setClass(getBaseContext(), ShowTourActivity.class);
+                    intent.putExtra("id", tripID);
+                    startActivity(intent);
+                }
+            });
 
             tourImage.setImageResource(drawableIds[mRndNumber]);
             tourImage.setPadding(20, 20, 20, 20);

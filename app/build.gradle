@@ -31,4 +31,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-identity:8.4.0'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.google.maps.android:android-maps-utils:0.4+'
 }

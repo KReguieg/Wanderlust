@@ -45,6 +45,15 @@
                 android:value="de.flowment.wanderlust.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".ShowTourActivity"
+            android:label="@string/title_activity_tour"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.flowment.wanderlust.MainActivity" />
+        </activity>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
