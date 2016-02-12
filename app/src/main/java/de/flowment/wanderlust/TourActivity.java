@@ -270,10 +270,10 @@ public class TourActivity extends AppCompatActivity implements OnMapReadyCallbac
                 mDistanceWalked += location.distanceTo(mLocation);
                 mLocation = location;
                 locationList.add(location);
-                speedTextView.setText(" " + location.getSpeed() * 3.6 + " km/h");
-                distanceTextView.setText(" " + mDistanceWalked + "m");
-                heightTextView.setText(" " + (int) location.getAltitude() + "m");
-                timeTextView.setText(" " + chronometer.getText());
+                speedTextView.setText(String.format("%.1f km/h", location.getSpeed() * 3.6));
+                distanceTextView.setText(String.format("%.3f km", mDistanceWalked / 1000.0));
+                heightTextView.setText(String.format("%.1f m", location.getAltitude()));
+                timeTextView.setText(String.format("%s" ,chronometer.getText()));
                 if (recordStarted && kmlWriter != null)
                     kmlWriter.pushLocation(mLocation);
 

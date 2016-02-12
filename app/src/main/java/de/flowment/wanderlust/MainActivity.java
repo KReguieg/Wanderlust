@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
             TextView tourKilometersWalked = new TextView(this);
             tourKilometersWalked.setId(R.id.tourKilometerWalkedId);
-            tourKilometersWalked.setText(String.valueOf((int) t.getKiloMetersWalked()) + "km");
+            tourKilometersWalked.setText(String.format("%.3f km", t.getKiloMetersWalked() / 1000.0));
 
 
             final ImageButton deleteButton = new ImageButton(this);
