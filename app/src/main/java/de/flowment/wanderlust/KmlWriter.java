@@ -65,32 +65,35 @@ public class KmlWriter {
     }
 
     private void writePlacemark() {
-        this.printWriter.println("<Placemark>");
-        this.printWriter.println("<name>gx:altitudeMode Example</name>");
-        this.printWriter.println("<Snippet>Photo</Snippet>");
-        this.printWriter.println("<description><![CDATA[  \n" +
-                " <img src='" + mCurrentPhotopath + "' width='400' /><br/&gt;  \n" +
-                " Photo taken from near the palace in Monaco<br/>  \n" +
-                " ]]>  \n" +
-                " </description>");
-        this.printWriter.println("<LookAt>");
-        this.printWriter.println("<longitude>" + this.locationList.get(0).getLongitude() + "</longitude>");
-        this.printWriter.println("<latitude>" + this.locationList.get(0).getLatitude() + "</latitude>");
-        this.printWriter.println("<heading>-60</heading>");
-        this.printWriter.println("<tilt>70</tilt>");
-        this.printWriter.println("<range>6300</range>");
-        this.printWriter.println("<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>");
-        this.printWriter.println("</LookAt>");
-        this.printWriter.println("<LineString>");
-        this.printWriter.println("<extrude>1</extrude>");
-        this.printWriter.println("<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>");
-        this.printWriter.println("<coordinates>");
-        for (Location location : this.locationList) {
-            this.printWriter.println(location.getLongitude() + "," + location.getLatitude() + "," + location.getAltitude());
+        if (this.locationList.size() != 0) {
+            this.printWriter.println("<Placemark>");
+            this.printWriter.println("<name>gx:altitudeMode Example</name>");
+            this.printWriter.println("<Snippet>Photo</Snippet>");
+            this.printWriter.println("<description><![CDATA[  \n" +
+                    " <img src='" + mCurrentPhotopath + "' width='400' /><br/&gt;  \n" +
+                    " Photo taken from near the palace in Monaco<br/>  \n" +
+                    " ]]>  \n" +
+                    " </description>");
+            this.printWriter.println("<LookAt>");
+            this.printWriter.println("<longitude>" + this.locationList.get(0).getLongitude() + "</longitude>");
+            this.printWriter.println("<latitude>" + this.locationList.get(0).getLatitude() + "</latitude>");
+            this.printWriter.println("<heading>-60</heading>");
+            this.printWriter.println("<tilt>70</tilt>");
+            this.printWriter.println("<range>6300</range>");
+            this.printWriter.println("<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>");
+            this.printWriter.println("</LookAt>");
+            this.printWriter.println("<LineString>");
+            this.printWriter.println("<extrude>1</extrude>");
+            this.printWriter.println("<gx:altitudeMode>relativeToSeaFloor</gx:altitudeMode>");
+            this.printWriter.println("<coordinates>");
+            for (Location location : this.locationList) {
+                this.printWriter.println(location.getLongitude() + "," + location.getLatitude() + "," + location.getAltitude());
+            }
+            this.printWriter.println("</coordinates>");
+            this.printWriter.println("</LineString>");
+            this.printWriter.println("</Placemark>");
         }
-        this.printWriter.println("</coordinates>");
-        this.printWriter.println("</LineString>");
-        this.printWriter.println("</Placemark>");
+
     }
 
     private void writeFooter() {
