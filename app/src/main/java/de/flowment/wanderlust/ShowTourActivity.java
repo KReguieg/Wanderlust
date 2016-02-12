@@ -135,6 +135,9 @@ public class ShowTourActivity extends AppCompatActivity implements OnMapReadyCal
         distanceTextView.setText(String.format("%.3f km", c.getInt(2) / 1000.0));
         int allSeconds = Integer.valueOf(c.getString(1));
         timeTextView.setText(DateUtils.formatElapsedTime(allSeconds));
+        double avgSpeed = (c.getInt(2) / allSeconds) * 3.6;
+        speedTextView.setText(String.format("%.1f km/h", avgSpeed));
+
         File file = new File(path);
         InputStream fileInputStream;
         try {
